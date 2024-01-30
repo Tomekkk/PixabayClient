@@ -4,9 +4,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class PixabaySearchResponse(
+data class SearchResponse(
     @Json(name = "hits")
-    val hits: List<PixabayPhoto>,
+    val hits: List<Image>,
     @Json(name = "total")
     val total: Int,
     @Json(name = "totalHits")

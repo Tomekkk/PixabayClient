@@ -16,7 +16,8 @@ lifecycle = "2.7.0"
 lifecycle-runtime-ktx = "2.7.0"
 material = "1.11.0"
 material3 = "1.1.2"
-moshi = "1.15.0"
+mockk = "1.13.9"
+moshi = "1.15.1"
 navigation = "2.7.6"
 okhttp-logging = "4.12.0"
 paging-compose = "3.3.0-alpha02"
@@ -56,6 +57,8 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging" }

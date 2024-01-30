@@ -21,6 +21,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "PIXABAY_API_KEY", "\"" + getPixabayApiKey() + "\"")
     }
 
     buildTypes {
@@ -63,6 +65,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.material)
     implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.converter.moshi)
@@ -96,4 +99,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+}
+
+fun getPixabayApiKey(): String? {
+    return project.findProperty("pixabay_api_key") as? String
 }
