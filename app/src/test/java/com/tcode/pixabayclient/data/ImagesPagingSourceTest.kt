@@ -43,7 +43,7 @@ class ImagesPagingSourceTest {
             assertEquals(
                 PagingSource.LoadResult.Page(
                     data = mockImages,
-                    prevKey = null,
+                    prevKey = 1,
                     nextKey = null,
                 ),
                 results,
