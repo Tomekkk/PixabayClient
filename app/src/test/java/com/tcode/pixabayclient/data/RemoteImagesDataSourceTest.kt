@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class ImagesRemoteDataSourceTest {
+class RemoteImagesDataSourceTest {
     @Test
     fun `when searchImages invoked should invoke api service function with api key provided by ApiKeyProvider`() =
         runTest {
@@ -19,7 +19,7 @@ class ImagesRemoteDataSourceTest {
                 }
             val pixabayService = mockk<PixabayService>(relaxed = true)
             val objectUnderTest =
-                ImagesRemoteDataSource(
+                RemoteImagesDataSource(
                     dispatcher = StandardTestDispatcher(testScheduler),
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
@@ -41,7 +41,7 @@ class ImagesRemoteDataSourceTest {
         }
 
     @Test
-    fun `when searchImages invoked should invoke api service function with provided query and page index and use default value perPage`() =
+    fun `when searchImages invoked should invoke api service function with provided query, page index and use default value perPage`() =
         runTest {
             // given
             val fakeKeyProvider =
@@ -50,7 +50,7 @@ class ImagesRemoteDataSourceTest {
                 }
             val pixabayService = mockk<PixabayService>(relaxed = true)
             val objectUnderTest =
-                ImagesRemoteDataSource(
+                RemoteImagesDataSource(
                     dispatcher = StandardTestDispatcher(testScheduler),
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
@@ -66,7 +66,7 @@ class ImagesRemoteDataSourceTest {
                     key = "fakeKey",
                     query = "query",
                     page = 1,
-                    perPage = ImagesRemoteDataSource.DEFAULT_PER_PAGE,
+                    perPage = ImagesDataSource.DEFAULT_IMAGES_PER_PAGE,
                 )
             }
         }

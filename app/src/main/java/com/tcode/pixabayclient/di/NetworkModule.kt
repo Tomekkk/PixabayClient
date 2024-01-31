@@ -3,6 +3,7 @@ package com.tcode.pixabayclient.di
 import android.content.Context
 import com.squareup.moshi.Moshi
 import com.tcode.pixabayclient.BuildConfig
+import com.tcode.pixabayclient.api.PixabayService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,4 +70,8 @@ object NetworkModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
             .build()
+
+    @Provides
+    @Singleton
+    fun providePixabayService(retrofit: Retrofit): PixabayService = retrofit.create(PixabayService::class.java)
 }
