@@ -24,8 +24,6 @@ data class ImageDto(
     val likes: Long,
     @Json(name = "comments")
     val comments: Long,
-    @Json(name = "user_id")
-    val userId: Long,
     @Json(name = "user")
     val user: String,
 )

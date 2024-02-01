@@ -15,7 +15,8 @@ class DefaultImagesRepositoryTest {
         runTest {
             // given
             val imagesDataSource = mockk<ImagesDataSource>(relaxed = true)
-            val objectUnderTest = DefaultImagesRepository(imagesDataSource)
+            val uniqueIdProvider = mockk<UniqueIdProvider>(relaxed = true)
+            val objectUnderTest = DefaultImagesRepository(imagesDataSource, uniqueIdProvider)
             // when
             objectUnderTest.getImagesStream("query").asSnapshot()
             // then

@@ -9,13 +9,18 @@ import retrofit2.HttpException
 import retrofit2.Response
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 
-class ImagesPagingSourceTest {
+class ImagesResultsPagingSourceTest {
+    private val fakeUniqueIdProvider =
+        object : UniqueIdProvider {
+            override fun provideUniqueId(): UniqueId = UniqueId("uniqueId")
+        }
+
     @Test
     fun `when service has single page available load should return images from first page and indicate there is no more items available`() =
         runTest {
             // given
             val itemsRange = 1L..3
-            val mockImages = ImagesFactory.create(itemsRange)
+            val mockImagesDto = ImagesFactory.createDto(itemsRange)
             val fakeDataSource =
                 object : ImagesDataSource {
                     override suspend fun searchImages(
@@ -23,13 +28,14 @@ class ImagesPagingSourceTest {
                         page: Int,
                     ): SearchResponse {
                         return SearchResponse(
-                            total = mockImages.size,
-                            totalHits = mockImages.size,
-                            hits = mockImages,
+                            total = mockImagesDto.size,
+                            totalHits = mockImagesDto.size,
+                            hits = mockImagesDto,
                         )
                     }
                 }
-            val pagingSource = ImagesPagingSource("query", fakeDataSource)
+
+            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
                 pagingSource.load(
@@ -42,7 +48,7 @@ class ImagesPagingSourceTest {
             // then
             assertEquals(
                 PagingSource.LoadResult.Page(
-                    data = mockImages,
+                    data = ImagesFactory.create(itemsRange, fakeUniqueIdProvider),
                     prevKey = null,
                     nextKey = null,
                 ),
@@ -66,7 +72,7 @@ class ImagesPagingSourceTest {
                             hits = emptyList(),
                         )
                 }
-            val pagingSource = ImagesPagingSource("query", fakeDataSource)
+            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             //  when
             val results =
                 pagingSource.load(
@@ -99,9 +105,9 @@ class ImagesPagingSourceTest {
                     ): SearchResponse {
                         val images =
                             if (page == 1) {
-                                ImagesFactory.create(1L..3L)
+                                ImagesFactory.createDto(1L..3L)
                             } else {
-                                ImagesFactory.create(4L..6L)
+                                ImagesFactory.createDto(4L..6L)
                             }
                         return SearchResponse(
                             total = 6,
@@ -110,7 +116,7 @@ class ImagesPagingSourceTest {
                         )
                     }
                 }
-            val pagingSource = ImagesPagingSource("query", fakeDataSource)
+            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
                 pagingSource.load(
@@ -123,7 +129,7 @@ class ImagesPagingSourceTest {
             // then
             assertEquals(
                 PagingSource.LoadResult.Page(
-                    data = ImagesFactory.create(1L..3L),
+                    data = ImagesFactory.create(1..3L, fakeUniqueIdProvider),
                     prevKey = null,
                     nextKey = 2,
                 ),
@@ -150,7 +156,7 @@ class ImagesPagingSourceTest {
                         )
                     }
                 }
-            val pagingSource = ImagesPagingSource("query", fakeDataSource)
+            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
                 pagingSource.load(
