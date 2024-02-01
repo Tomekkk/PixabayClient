@@ -6,5 +6,5 @@ import javax.inject.Inject
 class ConfigApiKeyProvider
     @Inject
     constructor() : ApiKeyProvider {
-        override val apiKey: String = BuildConfig.PIXABAY_API_KEY
+        override val apiKey: String = BuildConfig.pixabayapikey
     }

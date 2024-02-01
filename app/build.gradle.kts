@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hiltGradle)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.secretsGradle)
 }
 
 android {
@@ -21,8 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "PIXABAY_API_KEY", "\"" + getPixabayApiKey() + "\"")
     }
 
     buildTypes {
@@ -87,11 +86,16 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui.viewbinding)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Glide
+    implementation(libs.glide)
+    implementation(libs.glide.compose)
 
     // Testing
     kspAndroidTest(libs.hilt.android.compiler)
@@ -109,8 +113,4 @@ dependencies {
     testImplementation(libs.mockk.android)
     testImplementation(libs.androidx.paging.testing)
     testImplementation(libs.robolectric)
-}
-
-fun getPixabayApiKey(): String? {
-    return project.findProperty("pixabay_api_key") as? String
 }
