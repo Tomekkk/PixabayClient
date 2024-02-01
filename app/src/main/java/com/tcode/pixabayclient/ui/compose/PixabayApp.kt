@@ -17,7 +17,7 @@ fun PixabayApp() {
 fun PixabayNavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
-            SearchList()
+            SearchScreen()
         }
     }
 }

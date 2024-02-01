@@ -10,7 +10,7 @@ class DefaultImagesRepository
     @Inject
     constructor(private val imagesDataSource: ImagesDataSource) :
     ImagesRepository {
-        override suspend fun getImagesStream(query: String): Flow<PagingData<ImageDto>> =
+        override fun getImagesStream(query: String): Flow<PagingData<ImageDto>> =
             Pager(
                 config =
                     PagingConfig(

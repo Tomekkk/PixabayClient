@@ -11,7 +11,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DefaultImagesRepositoryTest {
     @Test
-    fun `when getImagesStream invoked should load first page from service with given query`() =
+    fun `when getImagesStream invoked should call service with given query and first page params`() =
         runTest {
             // given
             val imagesDataSource = mockk<ImagesDataSource>(relaxed = true)
