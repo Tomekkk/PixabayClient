@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class ImagesRemoteDataSource
+class RemoteImagesDataSource
     @Inject
     constructor(
         @IoDispatcher
@@ -15,10 +15,6 @@ class ImagesRemoteDataSource
         private val pixabayService: PixabayService,
         private val apiKeyProvider: ApiKeyProvider,
     ) : ImagesDataSource {
-        companion object {
-            const val DEFAULT_PER_PAGE = 20
-        }
-
         override suspend fun searchImages(
             query: String,
             page: Int,
@@ -28,7 +24,7 @@ class ImagesRemoteDataSource
                     apiKeyProvider.apiKey,
                     query,
                     page,
-                    perPage = DEFAULT_PER_PAGE,
+                    perPage = ImagesDataSource.DEFAULT_IMAGES_PER_PAGE,
                 )
             }
         }

@@ -13,13 +13,15 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
+      - name: Load Fake API Token
+        run: echo pixabay.api.key=\" \" > ./local.properties
 
       - name: Execute Gradle lintDebug
         run: ./gradlew lintDebug
