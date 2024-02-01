@@ -9,6 +9,8 @@ object ImagesFactory {
                 id = it,
                 tags = "tags",
                 previewURL = "previewURL",
+                previewWidth = 1,
+                previewHeight = 1,
                 largeImageURL = "largeImageURL",
                 downloads = it,
                 likes = it,
@@ -27,6 +29,7 @@ object ImagesFactory {
                 id = it,
                 tags = "tags",
                 previewURL = "previewURL",
+                aspectRatio = 1F,
                 user = "user$it",
             )
         }

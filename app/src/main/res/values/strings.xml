@@ -2,4 +2,6 @@
     <string name="app_name">PixabayClient</string>
     <string name="image_by">Image by %1$s</string>
     <string name="user_icon">User Icon</string>
+    <string name="search">Search</string>
+    <string name="search_icon">Search Icon</string>
 </resources>

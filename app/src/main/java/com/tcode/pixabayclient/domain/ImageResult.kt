@@ -7,5 +7,6 @@ data class ImageResult(
     val id: Long,
     val tags: String,
     val previewURL: String,
+    val aspectRatio: Float,
     val user: String,
 )

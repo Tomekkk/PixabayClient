@@ -5,4 +5,4 @@ interface UniqueIdProvider {
 }
 
 @JvmInline
-value class UniqueId(val value: String)
+value class UniqueId(val id: String)

@@ -27,6 +27,7 @@ class ImagesResultsPagingSource(
                         id = it.id,
                         tags = it.tags,
                         previewURL = it.previewURL,
+                        aspectRatio = it.previewWidth / it.previewHeight.toFloat(),
                         user = it.user,
                     )
                 }
