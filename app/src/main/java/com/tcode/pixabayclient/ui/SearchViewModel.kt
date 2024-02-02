@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.tcode.pixabayclient.data.ImagesRepository
+import com.tcode.pixabayclient.domain.GetSearchResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class SearchViewModel
     @Inject
     constructor(
-        private val imagesRepository: ImagesRepository,
+        private val getSearchResultsUseCase: GetSearchResultsUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private companion object {
@@ -26,11 +26,11 @@ class SearchViewModel
 
         val query = savedStateHandle.getStateFlow(QUERY_KEY, DEFAULT_QUERY)
 
-        private val queryToSearch = MutableStateFlow(DEFAULT_QUERY)
+        private val queryToSearch = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 1)
 
         val images =
-            queryToSearch.flatMapLatest {
-                imagesRepository.getImagesStream(it).cachedIn(viewModelScope)
+            queryToSearch.flatMapLatest { query ->
+                getSearchResultsUseCase.getResults(query).cachedIn(viewModelScope)
             }
 
         init {
@@ -38,7 +38,7 @@ class SearchViewModel
         }
 
         fun onSearch(query: String) {
-            queryToSearch.value = query
+            queryToSearch.tryEmit(query)
         }
 
         fun onQueryChanged(query: String) {

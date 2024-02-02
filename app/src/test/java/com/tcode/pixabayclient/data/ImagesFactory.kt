@@ -1,5 +1,7 @@
 package com.tcode.pixabayclient.data
 
+import com.tcode.pixabayclient.domain.ImageResult
+
 object ImagesFactory {
     fun createDto(range: LongRange): List<ImageDto> =
         range.map {
@@ -19,14 +21,11 @@ object ImagesFactory {
             )
         }
 
-    fun create(
-        range: LongRange,
-        uniqueIdProvider: UniqueIdProvider,
-    ): List<ImageResult> =
+    fun create(range: LongRange): List<ImageResult> =
         range.map {
             ImageResult(
-                uniqueId = uniqueIdProvider.provideUniqueId(),
                 id = it,
+                imageId = it,
                 tags = "tags",
                 previewURL = "previewURL",
                 aspectRatio = 1F,

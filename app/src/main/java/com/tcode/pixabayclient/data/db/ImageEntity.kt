@@ -11,10 +11,10 @@ import androidx.room.PrimaryKey
 )
 data class ImageEntity(
     /**
-     * Primary key required for persist correct order of images
+     * Primary key required for persist correct order of images and allow duplicates of images on different pages
      */
     @PrimaryKey(autoGenerate = true)
-    val _id: Long,
+    val id: Long? = null,
     val imageId: Long,
     val tags: String,
     val previewURL: String,

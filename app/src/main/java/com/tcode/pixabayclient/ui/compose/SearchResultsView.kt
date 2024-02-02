@@ -31,8 +31,7 @@ import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.tcode.pixabayclient.R
-import com.tcode.pixabayclient.data.ImageResult
-import com.tcode.pixabayclient.data.UniqueId
+import com.tcode.pixabayclient.domain.ImageResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -50,7 +49,7 @@ fun SearchResults(
         content = {
             items(
                 images.itemCount,
-                key = images.itemKey { it.uniqueId.id },
+                key = images.itemKey { it.id },
             ) { index ->
                 ImageCell(image = images[index]!!, onImageClick = onImageClick)
             }
@@ -65,7 +64,7 @@ fun ImageCell(
     image: ImageResult,
     onImageClick: (Long) -> Unit,
 ) {
-    Box(modifier = Modifier.clickable { onImageClick(image.id) }) {
+    Box(modifier = Modifier.clickable { onImageClick(image.imageId) }) {
         GlideImage(
             model = image.previewURL,
             contentScale = ContentScale.None,
@@ -136,8 +135,8 @@ private class SearchResultsPreviewParamProvider :
                 PagingData.from(
                     (0..10L).map {
                         ImageResult(
-                            uniqueId = UniqueId("$it"),
                             id = it,
+                            imageId = it,
                             tags = "tag1, tag2",
                             previewURL = "",
                             aspectRatio = 16F / 9,

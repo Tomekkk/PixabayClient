@@ -9,11 +9,14 @@ import androidx.room.Query
 @Dao
 interface ImagesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(images: List<ImageEntity>)
+    suspend fun insert(images: List<ImageEntity>): List<Long>
 
-    @Query("SELECT * FROM images WHERE `query`=:query ORDER BY _id ASC")
-    fun get(query: String): PagingSource<Int, ImageEntity>
+    @Query("SELECT * FROM images WHERE `query`=:query ORDER BY id ASC")
+    fun getAll(query: String): PagingSource<Int, ImageEntity>
 
     @Query("DELETE FROM images WHERE `query`=:query")
     suspend fun delete(query: String)
+
+    @Query("SELECT * FROM images WHERE imageId=:id")
+    suspend fun getImage(id: Long): ImageEntity?
 }
