@@ -97,6 +97,12 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.glide.compose)
 
+    // Room
+    implementation(libs.androidx.room)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+
     // Testing
     kspAndroidTest(libs.hilt.android.compiler)
     kspTest(libs.hilt.android.compiler)
