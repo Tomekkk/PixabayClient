@@ -9,4 +9,6 @@ interface ImagesDataSource {
         query: String,
         page: Int,
     ): SearchResponse
+
+    suspend fun getImage(id: Long): SearchResponse
 }

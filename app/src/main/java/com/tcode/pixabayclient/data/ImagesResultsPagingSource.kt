@@ -2,7 +2,6 @@ package com.tcode.pixabayclient.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.tcode.pixabayclient.domain.ImageResult
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST

@@ -22,6 +22,10 @@ data class ImageDto(
     val previewHeight: Int,
     @Json(name = "largeImageURL")
     val largeImageURL: String,
+    @Json(name = "imageWidth")
+    val imageWidth: Int,
+    @Json(name = "imageHeight")
+    val imageHeight: Int,
     @Json(name = "downloads")
     val downloads: Long,
     @Json(name = "likes")

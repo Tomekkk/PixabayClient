@@ -25,14 +25,17 @@ import com.tcode.pixabayclient.R
 import com.tcode.pixabayclient.ui.SearchViewModel
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
+fun SearchScreen(
+    viewModel: SearchViewModel = hiltViewModel(),
+    onImageClick: (Long) -> Unit,
+) {
     Scaffold(topBar = {
         SearchTopBar(
             onSearch = viewModel::onSearch,
             defaultText = viewModel.defaultQuery,
         )
     }) { padding ->
-        SearchResults(viewModel.images, Modifier.padding(padding))
+        SearchResults(viewModel.images, Modifier.padding(padding), onImageClick)
     }
 }
 
@@ -49,8 +52,14 @@ fun SearchTopBar(
         value = text,
         onValueChange = { text = it },
         label = { Text(stringResource(R.string.search)) },
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.search_icon)) },
+        leadingIcon = {
+            Icon(
+                Icons.Filled.Search,
+                contentDescription = stringResource(R.string.search_icon),
+            )
+        },
         modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions =
             KeyboardActions(onSearch = {

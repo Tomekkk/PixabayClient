@@ -28,4 +28,13 @@ class RemoteImagesDataSource
                 )
             }
         }
+
+        override suspend fun getImage(id: Long): SearchResponse {
+            return withContext(dispatcher) {
+                pixabayService.getImage(
+                    apiKeyProvider.apiKey,
+                    id,
+                )
+            }
+        }
     }

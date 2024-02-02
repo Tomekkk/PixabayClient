@@ -33,12 +33,14 @@ class ImagesResultsPagingSourceTest {
                             hits = mockImagesDto,
                         )
                     }
+
+                    override suspend fun getImage(id: Long): SearchResponse = throw NotImplementedError()
                 }
 
-            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
+            val objectUnderTest = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
-                pagingSource.load(
+                objectUnderTest.load(
                     PagingSource.LoadParams.Refresh(
                         key = null,
                         loadSize = 3,
@@ -71,11 +73,13 @@ class ImagesResultsPagingSourceTest {
                             totalHits = 0,
                             hits = emptyList(),
                         )
+
+                    override suspend fun getImage(id: Long): SearchResponse = throw NotImplementedError()
                 }
-            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
+            val objectUnderTest = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             //  when
             val results =
-                pagingSource.load(
+                objectUnderTest.load(
                     PagingSource.LoadParams.Refresh(
                         key = null,
                         loadSize = ImagesDataSource.DEFAULT_IMAGES_PER_PAGE,
@@ -115,11 +119,13 @@ class ImagesResultsPagingSourceTest {
                             hits = images,
                         )
                     }
+
+                    override suspend fun getImage(id: Long): SearchResponse = throw NotImplementedError()
                 }
-            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
+            val objectUnderTest = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
-                pagingSource.load(
+                objectUnderTest.load(
                     PagingSource.LoadParams.Refresh(
                         key = null,
                         loadSize = 3,
@@ -138,7 +144,7 @@ class ImagesResultsPagingSourceTest {
         }
 
     @Test
-    fun `when service return is out of valid range load should return empty images list page and indicate there is no more items available`() =
+    fun `when service returns out of valid error should return empty images list page and indicate there is no more items available`() =
         runTest {
             // given
             val fakeDataSource =
@@ -155,11 +161,13 @@ class ImagesResultsPagingSourceTest {
                             ),
                         )
                     }
+
+                    override suspend fun getImage(id: Long): SearchResponse = throw NotImplementedError()
                 }
-            val pagingSource = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
+            val objectUnderTest = ImagesResultsPagingSource("query", fakeDataSource, fakeUniqueIdProvider)
             // when
             val results =
-                pagingSource.load(
+                objectUnderTest.load(
                     PagingSource.LoadParams.Refresh(
                         key = null,
                         loadSize = 3,

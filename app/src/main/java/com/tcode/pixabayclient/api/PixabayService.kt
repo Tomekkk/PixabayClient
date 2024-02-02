@@ -12,4 +12,10 @@ interface PixabayService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
     ): SearchResponse
+
+    @GET("/api/")
+    suspend fun getImage(
+        @Query("key") key: String,
+        @Query("id") id: Long,
+    ): SearchResponse
 }

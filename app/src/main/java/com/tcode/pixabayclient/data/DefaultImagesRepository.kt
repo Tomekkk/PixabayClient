@@ -3,7 +3,6 @@ package com.tcode.pixabayclient.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.tcode.pixabayclient.domain.ImageResult
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -29,4 +28,19 @@ class DefaultImagesRepository
                     )
                 },
             ).flow
+
+        override suspend fun getImage(id: Long): ImageDetails? {
+            return imagesDataSource.getImage(id).hits.firstOrNull()?.let {
+                ImageDetails(
+                    id = it.id,
+                    tags = it.tags,
+                    user = it.user,
+                    likes = it.likes,
+                    comments = it.comments,
+                    downloads = it.downloads,
+                    largeImageURL = it.largeImageURL,
+                    aspectRatio = it.imageWidth / it.imageHeight.toFloat(),
+                )
+            }
+        }
     }
