@@ -70,4 +70,30 @@ class RemoteImagesDataSourceTest {
                 )
             }
         }
+
+    @Test
+    fun `when getImage invoked should invoke getImage api service function with image id`() =
+        runTest {
+            // given
+            val fakeKeyProvider =
+                object : ApiKeyProvider {
+                    override val apiKey: String = "fakeKey"
+                }
+            val pixabayService = mockk<PixabayService>(relaxed = true)
+            val objectUnderTest =
+                RemoteImagesDataSource(
+                    dispatcher = StandardTestDispatcher(testScheduler),
+                    pixabayService = pixabayService,
+                    apiKeyProvider = fakeKeyProvider,
+                )
+            // when
+            objectUnderTest.getImage(123)
+            // then
+            coVerify {
+                pixabayService.getImage(
+                    key = "fakeKey",
+                    id = 123,
+                )
+            }
+        }
 }

@@ -1,6 +1,4 @@
-package com.tcode.pixabayclient.domain
-
-import com.tcode.pixabayclient.data.UniqueId
+package com.tcode.pixabayclient.data
 
 data class ImageResult(
     val uniqueId: UniqueId,

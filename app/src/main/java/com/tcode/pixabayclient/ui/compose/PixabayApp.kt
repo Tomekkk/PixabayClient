@@ -12,12 +12,16 @@ fun PixabayApp() {
     PixabayNavHost(navController = navController)
 }
 
-@Suppress("ktlint:standard:function-naming")
 @Composable
 fun PixabayNavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
-            SearchScreen()
+            SearchScreen(onImageClick = {
+                navController.navigate(Screen.Details.createRoute(imageId = it))
+            })
+        }
+        composable(route = Screen.Details.route, arguments = Screen.Details.navArguments) {
+            DetailsScreen { navController.navigateUp() }
         }
     }
 }

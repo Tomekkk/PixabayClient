@@ -1,7 +1,5 @@
 package com.tcode.pixabayclient.data
 
-import com.tcode.pixabayclient.domain.ImageResult
-
 object ImagesFactory {
     fun createDto(range: LongRange): List<ImageDto> =
         range.map {
@@ -12,6 +10,8 @@ object ImagesFactory {
                 previewWidth = 1,
                 previewHeight = 1,
                 largeImageURL = "largeImageURL",
+                imageWidth = 1,
+                imageHeight = 1,
                 downloads = it,
                 likes = it,
                 comments = it,

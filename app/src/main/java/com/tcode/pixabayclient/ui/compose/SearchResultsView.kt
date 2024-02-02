@@ -1,6 +1,7 @@
 package com.tcode.pixabayclient.ui.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +31,8 @@ import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.tcode.pixabayclient.R
+import com.tcode.pixabayclient.data.ImageResult
 import com.tcode.pixabayclient.data.UniqueId
-import com.tcode.pixabayclient.domain.ImageResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.flowOf
 fun SearchResults(
     imagesStream: Flow<PagingData<ImageResult>>,
     modifier: Modifier = Modifier,
+    onImageClick: (Long) -> Unit = {},
 ) {
     val images = imagesStream.collectAsLazyPagingItems()
     LazyVerticalStaggeredGrid(
@@ -51,7 +52,7 @@ fun SearchResults(
                 images.itemCount,
                 key = images.itemKey { it.uniqueId.id },
             ) { index ->
-                ImageCell(image = images[index]!!)
+                ImageCell(image = images[index]!!, onImageClick = onImageClick)
             }
         },
         modifier = modifier.fillMaxSize(),
@@ -60,58 +61,61 @@ fun SearchResults(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ImageCell(image: ImageResult) {
-        Box {
-            GlideImage(
-                model = image.previewURL,
-                contentScale = ContentScale.None,
-                contentDescription = stringResource(R.string.image_by, image.user),
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .aspectRatio(image.aspectRatio),
-            )
+fun ImageCell(
+    image: ImageResult,
+    onImageClick: (Long) -> Unit,
+) {
+    Box(modifier = Modifier.clickable { onImageClick(image.id) }) {
+        GlideImage(
+            model = image.previewURL,
+            contentScale = ContentScale.None,
+            contentDescription = stringResource(R.string.image_by, image.user),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .aspectRatio(image.aspectRatio),
+        )
 
-            Text(
-                text = stringResource(R.string.image_by, image.user),
-                maxLines = 1,
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White,
-                modifier =
-                    Modifier
-                        .align(Alignment.TopStart)
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                0F to Color.Black.copy(alpha = 0.8F),
-                                .5F to Color.Black.copy(alpha = 0.5F),
-                                1F to Color.Transparent,
-                            ),
-                        )
-                        .padding(start = 4.dp, end = 4.dp, bottom = 8.dp, top = 4.dp),
-            )
+        Text(
+            text = stringResource(R.string.image_by, image.user),
+            maxLines = 1,
+            style = MaterialTheme.typography.labelMedium,
+            color = Color.White,
+            modifier =
+                Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            0F to Color.Black.copy(alpha = 0.8F),
+                            .5F to Color.Black.copy(alpha = 0.5F),
+                            1F to Color.Transparent,
+                        ),
+                    )
+                    .padding(start = 4.dp, end = 4.dp, bottom = 8.dp, top = 4.dp),
+        )
 
-            Text(
-                text = image.tags,
-                maxLines = 1,
-                style = MaterialTheme.typography.labelSmall,
-                textAlign = TextAlign.End,
-                modifier =
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                0F to Color.Transparent,
-                                .5F to Color.Black.copy(alpha = 0.5F),
-                                1F to Color.Black.copy(alpha = 0.8F),
-                            ),
-                        )
-                        .padding(start = 4.dp, end = 4.dp, bottom = 4.dp, top = 8.dp),
-                color = Color.White,
-            )
-        }
+        Text(
+            text = image.tags,
+            maxLines = 1,
+            style = MaterialTheme.typography.labelSmall,
+            textAlign = TextAlign.End,
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            0F to Color.Transparent,
+                            .5F to Color.Black.copy(alpha = 0.5F),
+                            1F to Color.Black.copy(alpha = 0.8F),
+                        ),
+                    )
+                    .padding(start = 4.dp, end = 4.dp, bottom = 4.dp, top = 8.dp),
+            color = Color.White,
+        )
+    }
 }
 
 @Preview
