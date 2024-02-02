@@ -11,10 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -23,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.tcode.pixabayclient.R
 import com.tcode.pixabayclient.ui.SearchViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SearchScreen(
@@ -32,7 +30,8 @@ fun SearchScreen(
     Scaffold(topBar = {
         SearchTopBar(
             onSearch = viewModel::onSearch,
-            defaultText = viewModel.defaultQuery,
+            onQueryChanged = viewModel::onQueryChanged,
+            query = viewModel.query,
         )
     }) { padding ->
         SearchResults(viewModel.images, Modifier.padding(padding), onImageClick)
@@ -42,15 +41,16 @@ fun SearchScreen(
 @Composable
 fun SearchTopBar(
     onSearch: (String) -> Unit,
-    defaultText: String,
+    onQueryChanged: (String) -> Unit,
+    query: StateFlow<String>,
 ) {
-    var text: String by remember { mutableStateOf(defaultText) }
+    val text = query.collectAsState().value
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
     TextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = { onQueryChanged(it) },
         label = { Text(stringResource(R.string.search)) },
         leadingIcon = {
             Icon(
@@ -63,8 +63,7 @@ fun SearchTopBar(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions =
             KeyboardActions(onSearch = {
-                text = text.trim()
-                onSearch(text)
+                onSearch(text.trim())
                 // Hide the keyboard after submitting the search
                 keyboardController?.hide()
                 // or hide keyboard
