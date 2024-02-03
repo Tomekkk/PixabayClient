@@ -1,7 +1,8 @@
 package com.tcode.pixabayclient.data
 
-import com.tcode.pixabayclient.api.ApiKeyProvider
-import com.tcode.pixabayclient.api.PixabayService
+import com.tcode.pixabayclient.data.api.ApiKeyProvider
+import com.tcode.pixabayclient.data.api.PixabayService
+import com.tcode.pixabayclient.data.api.SearchResponse
 import com.tcode.pixabayclient.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

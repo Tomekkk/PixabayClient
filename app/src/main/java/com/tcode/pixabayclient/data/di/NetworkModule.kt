@@ -1,9 +1,9 @@
-package com.tcode.pixabayclient.di
+package com.tcode.pixabayclient.data.di
 
 import android.content.Context
 import com.squareup.moshi.Moshi
 import com.tcode.pixabayclient.BuildConfig
-import com.tcode.pixabayclient.api.PixabayService
+import com.tcode.pixabayclient.data.api.PixabayService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

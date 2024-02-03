@@ -1,4 +1,4 @@
-package com.tcode.pixabayclient.di
+package com.tcode.pixabayclient.data.di
 
 import com.tcode.pixabayclient.data.CachedImagesRepository
 import com.tcode.pixabayclient.data.ImagesDataSource

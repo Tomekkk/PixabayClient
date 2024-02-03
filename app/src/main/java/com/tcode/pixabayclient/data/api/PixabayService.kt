@@ -1,6 +1,5 @@
-package com.tcode.pixabayclient.api
+package com.tcode.pixabayclient.data.api
 
-import com.tcode.pixabayclient.data.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

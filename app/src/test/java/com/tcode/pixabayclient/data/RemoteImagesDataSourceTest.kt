@@ -1,7 +1,7 @@
 package com.tcode.pixabayclient.data
 
-import com.tcode.pixabayclient.api.ApiKeyProvider
-import com.tcode.pixabayclient.api.PixabayService
+import com.tcode.pixabayclient.data.api.ApiKeyProvider
+import com.tcode.pixabayclient.data.api.PixabayService
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.StandardTestDispatcher

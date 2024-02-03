@@ -1,5 +1,6 @@
 package com.tcode.pixabayclient.data
 
+import com.tcode.pixabayclient.data.api.ImageDto
 import com.tcode.pixabayclient.domain.ImageResult
 
 object ImagesFactory {

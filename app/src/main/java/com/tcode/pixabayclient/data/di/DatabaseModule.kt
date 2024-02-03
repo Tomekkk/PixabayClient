@@ -1,4 +1,4 @@
-package com.tcode.pixabayclient.di
+package com.tcode.pixabayclient.data.di
 
 import android.content.Context
 import androidx.room.Room

@@ -1,4 +1,4 @@
-package com.tcode.pixabayclient.api
+package com.tcode.pixabayclient.data.api
 
 import com.tcode.pixabayclient.BuildConfig
 import javax.inject.Inject
