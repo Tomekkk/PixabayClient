@@ -83,15 +83,13 @@ class ImagesResultsMediator(
                     query = query,
                     page = page,
                 )
-            val noMoreData = response.total == 0 || response.hits.isEmpty()
 
+            val noMoreData =
+                response.totalHits == 0 || response.hits.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     remoteKeysDao.delete(query)
                     imagesDao.delete(query)
-                }
-                if (!noMoreData) {
-                    remoteKeysDao.delete(query)
                 }
                 val insertedIds =
                     imagesDao.insert(
