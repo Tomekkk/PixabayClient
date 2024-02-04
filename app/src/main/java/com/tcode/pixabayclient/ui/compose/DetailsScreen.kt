@@ -70,9 +70,6 @@ fun DetailsScreen(
                 },
             )
         },
-        bottomBar = {
-            PixabayFooter(modifier = Modifier.padding(8.dp).fillMaxWidth())
-        },
     ) { padding ->
         imageDetails?.let { details ->
             Column(
@@ -91,10 +88,12 @@ fun DetailsScreen(
                         modifier.wrapContentHeight().aspectRatio(details.aspectRatio),
                 )
 
-                Column(modifier = modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    PixabayFooter(modifier = Modifier.fillMaxWidth())
+
                     Text(
                         text = stringResource(R.string.image_by, details.user),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelLarge,
                     )
 
                     Text(
