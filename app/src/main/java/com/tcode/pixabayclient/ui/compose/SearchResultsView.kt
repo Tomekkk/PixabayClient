@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -54,7 +53,7 @@ fun SearchResults(
                 ImageCell(image = images[index]!!, onImageClick = onImageClick)
             }
         },
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
     )
 }
 
@@ -80,7 +79,7 @@ fun ImageCell(
             text = stringResource(R.string.image_by, image.user),
             maxLines = 1,
             style = MaterialTheme.typography.labelMedium,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.inverseOnSurface,
             modifier =
                 Modifier
                     .align(Alignment.TopStart)
@@ -112,7 +111,7 @@ fun ImageCell(
                         ),
                     )
                     .padding(start = 4.dp, end = 4.dp, bottom = 4.dp, top = 8.dp),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.inverseOnSurface,
         )
     }
 }

@@ -70,6 +70,9 @@ fun DetailsScreen(
                 },
             )
         },
+        bottomBar = {
+            PixabayFooter(modifier = Modifier.padding(8.dp).fillMaxWidth())
+        },
     ) { padding ->
         imageDetails?.let { details ->
             Column(

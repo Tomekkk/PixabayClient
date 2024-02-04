@@ -8,6 +8,7 @@ import com.tcode.pixabayclient.domain.GetSearchResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
@@ -24,9 +25,11 @@ class SearchViewModel
             const val QUERY_KEY = "query"
         }
 
-        val query = savedStateHandle.getStateFlow(QUERY_KEY, DEFAULT_QUERY)
+        val queryStream = savedStateHandle.getStateFlow(QUERY_KEY, DEFAULT_QUERY)
 
         private val queryToSearch = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 1)
+
+        val queriesHistoryStream = MutableStateFlow(listOf(DEFAULT_QUERY))
 
         val images =
             queryToSearch.flatMapLatest { query ->
