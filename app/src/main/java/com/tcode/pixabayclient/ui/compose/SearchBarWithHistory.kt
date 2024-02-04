@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tcode.pixabayclient.R
+import com.tcode.pixabayclient.domain.PreviousQuery
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +33,7 @@ fun SearchBarWithHistory(
     onSearch: (String) -> Unit,
     onQueryChanged: (String) -> Unit,
     queryStream: StateFlow<String>,
-    history: StateFlow<List<String>>,
+    history: StateFlow<List<PreviousQuery>>,
 ) {
     var active by remember { mutableStateOf(false) }
     val historyList = history.collectAsState()
@@ -86,7 +87,7 @@ fun SearchBarWithHistory(
         LazyColumn(content = {
             historyList.value.forEach {
                 item {
-                    HistoryItem(historicalQuery = it) {
+                    HistoryItem(historicalQuery = it.query) {
                         onQueryChanged(it)
                         onSearch(it)
                         active = false

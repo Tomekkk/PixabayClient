@@ -5,11 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.tcode.pixabayclient.domain.GetSearchResultsUseCase
+import com.tcode.pixabayclient.domain.GetStoredQueryResultsUseCase
+import com.tcode.pixabayclient.domain.PreviousQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -18,6 +23,7 @@ class SearchViewModel
     @Inject
     constructor(
         private val getSearchResultsUseCase: GetSearchResultsUseCase,
+        private val getStoredQueryResultsUseCase: GetStoredQueryResultsUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private companion object {
@@ -29,7 +35,8 @@ class SearchViewModel
 
         private val queryToSearch = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 1)
 
-        val queriesHistoryStream = MutableStateFlow(listOf(DEFAULT_QUERY))
+        private val _queriesHistoryStream = MutableStateFlow(emptyList<PreviousQuery>())
+        val queriesHistoryStream = _queriesHistoryStream.asStateFlow()
 
         val images =
             queryToSearch.flatMapLatest { query ->
@@ -38,6 +45,9 @@ class SearchViewModel
 
         init {
             onSearch(DEFAULT_QUERY)
+            getStoredQueryResultsUseCase().onEach {
+                _queriesHistoryStream.value = it
+            }.launchIn(viewModelScope)
         }
 
         fun onSearch(query: String) {
