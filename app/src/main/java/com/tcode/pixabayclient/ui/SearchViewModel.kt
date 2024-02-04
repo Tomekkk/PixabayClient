@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
@@ -42,6 +43,9 @@ class SearchViewModel
             queryToSearch.flatMapLatest { query ->
                 getSearchResultsUseCase.getResults(query).cachedIn(viewModelScope)
             }
+
+        private val _snackBarMessage = MutableSharedFlow<String>(extraBufferCapacity = 1)
+        val snackBarMessage = _snackBarMessage.asSharedFlow()
 
         init {
             onSearch(DEFAULT_QUERY)

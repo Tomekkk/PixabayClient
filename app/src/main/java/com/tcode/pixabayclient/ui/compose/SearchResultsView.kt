@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -36,11 +39,24 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SearchResults(
-    imagesStream: Flow<PagingData<ImageResult>>,
     modifier: Modifier = Modifier,
+    imagesStream: Flow<PagingData<ImageResult>>,
     onImageClick: (Long) -> Unit = {},
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) {
     val images = imagesStream.collectAsLazyPagingItems()
+    (images.loadState.refresh as? LoadState.Error)?.error?.message?.let { errorMessage ->
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(message = errorMessage)
+        }
+    }
+
+    (images.loadState.append as? LoadState.Error)?.error?.message?.let { errorMessage ->
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(message = errorMessage)
+        }
+    }
+
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(160.dp),
         verticalItemSpacing = 4.dp,
@@ -122,7 +138,7 @@ fun SearchResultsPreview(
     @PreviewParameter(SearchResultsPreviewParamProvider::class) imagesStream: Flow<PagingData<ImageResult>>,
 ) {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-        SearchResults(imagesStream)
+        SearchResults(imagesStream = imagesStream)
     }
 }
 
