@@ -1,4 +1,4 @@
-package com.tcode.pixabayclient.data
+package com.tcode.pixabayclient.data.api
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

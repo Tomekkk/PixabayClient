@@ -1,41 +1,47 @@
 package com.tcode.pixabayclient.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.tcode.pixabayclient.data.ImageResult
-import com.tcode.pixabayclient.data.ImagesRepository
+import com.tcode.pixabayclient.domain.GetSearchResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchViewModel
     @Inject
     constructor(
-        private val imagesRepository: ImagesRepository,
+        private val getSearchResultsUseCase: GetSearchResultsUseCase,
+        private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private companion object {
             const val DEFAULT_QUERY = "fruits"
+            const val QUERY_KEY = "query"
         }
 
-        val defaultQuery = DEFAULT_QUERY
+        val query = savedStateHandle.getStateFlow(QUERY_KEY, DEFAULT_QUERY)
 
-        private val _images = MutableStateFlow<PagingData<ImageResult>?>(null)
-        val images: Flow<PagingData<ImageResult>> = _images.filterNotNull()
+        private val queryToSearch = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 1)
+
+        val images =
+            queryToSearch.flatMapLatest { query ->
+                getSearchResultsUseCase.getResults(query).cachedIn(viewModelScope)
+            }
 
         init {
             onSearch(DEFAULT_QUERY)
         }
 
         fun onSearch(query: String) {
-            viewModelScope.launch {
-                _images.value = imagesRepository.getImagesStream(query).cachedIn(viewModelScope).first()
-            }
+            queryToSearch.tryEmit(query)
+        }
+
+        fun onQueryChanged(query: String) {
+            savedStateHandle[QUERY_KEY] = query
         }
     }

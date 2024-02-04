@@ -24,11 +24,16 @@ okhttp-logging = "4.12.0"
 paging-compose = "3.3.0-alpha02"
 retrofit = "2.9.0"
 robolectric = "4.11.1"
+room = "2.6.1"
 secrets = "2.0.1"
 view-model-compose = "2.7.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
@@ -71,6 +76,7 @@ okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,4 +1,4 @@
-package com.tcode.pixabayclient.data
+package com.tcode.pixabayclient.domain
 
 data class ImageDetails(
     val id: Long,

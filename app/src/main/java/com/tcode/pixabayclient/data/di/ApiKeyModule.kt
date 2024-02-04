@@ -1,7 +1,7 @@
-package com.tcode.pixabayclient.di
+package com.tcode.pixabayclient.data.di
 
-import com.tcode.pixabayclient.api.ApiKeyProvider
-import com.tcode.pixabayclient.api.ConfigApiKeyProvider
+import com.tcode.pixabayclient.data.api.ApiKeyProvider
+import com.tcode.pixabayclient.data.api.ConfigApiKeyProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

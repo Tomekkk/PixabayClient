@@ -1,8 +1,8 @@
-package com.tcode.pixabayclient.data
+package com.tcode.pixabayclient.domain
 
 data class ImageResult(
-    val uniqueId: UniqueId,
     val id: Long,
+    val imageId: Long,
     val tags: String,
     val previewURL: String,
     val aspectRatio: Float,

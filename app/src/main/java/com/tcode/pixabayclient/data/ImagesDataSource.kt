@@ -1,5 +1,7 @@
 package com.tcode.pixabayclient.data
 
+import com.tcode.pixabayclient.data.api.SearchResponse
+
 interface ImagesDataSource {
     companion object {
         const val DEFAULT_IMAGES_PER_PAGE = 40

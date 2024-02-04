@@ -1,9 +1,8 @@
 package com.tcode.pixabayclient.domain
 
 import androidx.paging.PagingData
-import com.tcode.pixabayclient.data.ImageDetails
-import com.tcode.pixabayclient.data.ImageResult
 import com.tcode.pixabayclient.data.ImagesRepository
+import com.tcode.pixabayclient.data.db.ImageEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -11,9 +10,9 @@ import org.junit.Test
 
 class GetImageDetailsUseCaseTest {
     @Test
-    fun `should return image details from repository`() {
+    fun `should return image details mapped from repository's entity`() {
         runTest {
-            // given
+            // Given
             val fakeImageDetails =
                 ImageDetails(
                     id = 1,
@@ -27,14 +26,29 @@ class GetImageDetailsUseCaseTest {
                 )
             val fakeImagesRepository =
                 object : ImagesRepository {
-                    override fun getImagesStream(query: String): Flow<PagingData<ImageResult>> = throw NotImplementedError()
+                    override fun getImagesStream(query: String): Flow<PagingData<ImageEntity>> = throw NotImplementedError()
 
-                    override suspend fun getImage(id: Long): ImageDetails = fakeImageDetails
+                    override suspend fun getImage(id: Long): ImageEntity =
+                        ImageEntity(
+                            imageId = 1,
+                            user = "user",
+                            downloads = 1,
+                            likes = 1,
+                            comments = 1,
+                            tags = "tags",
+                            largeImageURL = "largeImageURL",
+                            previewWidth = 1,
+                            previewHeight = 1,
+                            imageHeight = 1,
+                            imageWidth = 1,
+                            previewURL = "previewURL",
+                            query = "query",
+                        )
                 }
             val objectUnderTest = GetImageDetailsUseCase(fakeImagesRepository)
-            // when
+            // When
             val result = objectUnderTest.get(1)
-            // then
+            // Then
             assertEquals(fakeImageDetails, result)
         }
     }

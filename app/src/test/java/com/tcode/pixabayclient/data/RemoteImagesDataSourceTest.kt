@@ -1,7 +1,7 @@
 package com.tcode.pixabayclient.data
 
-import com.tcode.pixabayclient.api.ApiKeyProvider
-import com.tcode.pixabayclient.api.PixabayService
+import com.tcode.pixabayclient.data.api.ApiKeyProvider
+import com.tcode.pixabayclient.data.api.PixabayService
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -12,7 +12,7 @@ class RemoteImagesDataSourceTest {
     @Test
     fun `when searchImages invoked should invoke api service function with api key provided by ApiKeyProvider`() =
         runTest {
-            // given
+            // Given
             val fakeKeyProvider =
                 object : ApiKeyProvider {
                     override val apiKey: String = "fakeKey"
@@ -24,12 +24,12 @@ class RemoteImagesDataSourceTest {
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
-            // when
+            // When
             objectUnderTest.searchImages(
                 query = "fakeQuery",
                 page = 1,
             )
-            // then
+            // Then
             coVerify {
                 pixabayService.searchImages(
                     key = "fakeKey",
@@ -43,7 +43,7 @@ class RemoteImagesDataSourceTest {
     @Test
     fun `when searchImages invoked should invoke api service function with provided query, page index and use default value perPage`() =
         runTest {
-            // given
+            // Given
             val fakeKeyProvider =
                 object : ApiKeyProvider {
                     override val apiKey: String = "fakeKey"
@@ -55,12 +55,12 @@ class RemoteImagesDataSourceTest {
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
-            // when
+            // When
             objectUnderTest.searchImages(
                 query = "query",
                 page = 1,
             )
-            // then
+            // Then
             coVerify {
                 pixabayService.searchImages(
                     key = "fakeKey",
@@ -74,7 +74,7 @@ class RemoteImagesDataSourceTest {
     @Test
     fun `when getImage invoked should invoke getImage api service function with image id`() =
         runTest {
-            // given
+            // Given
             val fakeKeyProvider =
                 object : ApiKeyProvider {
                     override val apiKey: String = "fakeKey"
@@ -86,9 +86,9 @@ class RemoteImagesDataSourceTest {
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
-            // when
+            // When
             objectUnderTest.getImage(123)
-            // then
+            // Then
             coVerify {
                 pixabayService.getImage(
                     key = "fakeKey",

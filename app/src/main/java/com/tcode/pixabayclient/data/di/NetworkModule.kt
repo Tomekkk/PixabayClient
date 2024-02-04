@@ -1,9 +1,9 @@
-package com.tcode.pixabayclient.di
+package com.tcode.pixabayclient.data.di
 
 import android.content.Context
 import com.squareup.moshi.Moshi
 import com.tcode.pixabayclient.BuildConfig
-import com.tcode.pixabayclient.api.PixabayService
+import com.tcode.pixabayclient.data.api.PixabayService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -45,6 +46,8 @@ object NetworkModule {
         @ApplicationContext appContext: Context,
     ) = Cache(appContext.cacheDir, CACHE_SIZE_BYTES)
 
+    private const val DEFAULT_NETWORK_TIMEOUT_SECONDS = 30L
+
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -52,6 +55,9 @@ object NetworkModule {
         cache: Cache,
     ) = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .connectTimeout(DEFAULT_NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(DEFAULT_NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .writeTimeout(DEFAULT_NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .cache(cache)
         .build()
 
