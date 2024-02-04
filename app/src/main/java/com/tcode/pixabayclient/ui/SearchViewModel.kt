@@ -23,7 +23,7 @@ class SearchViewModel
     @Inject
     constructor(
         private val getSearchResultsUseCase: GetSearchResultsUseCase,
-        private val getStoredQueryResultsUseCase: GetStoredQueryResultsUseCase,
+        getStoredQueryResultsUseCase: GetStoredQueryResultsUseCase,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private companion object {

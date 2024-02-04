@@ -1,6 +1,5 @@
 package com.tcode.pixabayclient.ui.compose
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,15 @@ fun SearchScreen(
     onImageClick: (Long) -> Unit,
 ) {
     Scaffold(
+        topBar = {
+            SearchBarWithHistory(
+                onSearch = viewModel::onSearch,
+                onQueryChanged = viewModel::onQueryChanged,
+                queryStream = viewModel.queryStream,
+                history = viewModel.queriesHistoryStream,
+                modifier = modifier.padding(8.dp),
+            )
+        },
         bottomBar = {
             PixabayFooter(
                 modifier =
@@ -27,15 +35,12 @@ fun SearchScreen(
             )
         },
     ) { padding ->
-        Box(modifier = modifier.padding(padding)) {
-            SearchResults(viewModel.images, modifier.fillMaxSize(), onImageClick)
-            SearchBarWithHistory(
-                onSearch = viewModel::onSearch,
-                onQueryChanged = viewModel::onQueryChanged,
-                queryStream = viewModel.queryStream,
-                history = viewModel.queriesHistoryStream,
-                modifier = modifier.padding(16.dp),
-            )
-        }
+        SearchResults(
+            viewModel.images,
+            modifier
+                .padding(padding)
+                .fillMaxSize(),
+            onImageClick,
+        )
     }
 }
