@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RemoteKeysDao {
@@ -25,4 +26,7 @@ interface RemoteKeysDao {
 
     @Query("SELECT createdAt FROM remote_keys WHERE `query` = :query ORDER BY createdAt ASC LIMIT 1")
     suspend fun getOldestCreationTime(query: String): Long?
+
+    @Query("SELECT `query` FROM remote_keys GROUP BY `query` ORDER BY createdAt DESC")
+    fun getStoredQueriesStream(): Flow<List<String>>
 }

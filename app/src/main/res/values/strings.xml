@@ -8,4 +8,8 @@
     <string name="likes">Likes: %d</string>
     <string name="downloads">Downloads: %d</string>
     <string name="comments">Comments: %d</string>
+    <string name="close">Close</string>
+    <string name="clear">Clear</string>
+    <string name="powered_by">Powered by</string>
+    <string name="pixabay_logo">Pixabay logo</string>
 </resources>
