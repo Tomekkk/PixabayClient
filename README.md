@@ -18,6 +18,9 @@ The required minimum API level is 23.
 - Image details screen with larger image and stats accessible from the list
 - Dynamic theming based on the system theme (light or dark)
 
+https://github.com/Tomekkk/PixabayClient/assets/3057880/41b03ffe-9962-4916-8df3-df8ddcdac21d
+
+
 ## Architecture
 
 The PixabayClient app is built on top of layered architecture that follows uni-directional data
