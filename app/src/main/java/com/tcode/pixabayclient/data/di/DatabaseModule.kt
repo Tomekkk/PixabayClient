@@ -27,5 +27,5 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideRemoteKeysDao(database: ImagesDatabase) = database.getRemoteKeys()
+    fun provideRemoteKeysDao(database: ImagesDatabase) = database.getRemoteKeysDao()
 }

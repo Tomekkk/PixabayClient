@@ -1,10 +1,10 @@
-package com.tcode.pixabayclient.data
+package com.tcode.pixabayclient.data.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.tcode.pixabayclient.data.ImagesDataSource
 import com.tcode.pixabayclient.data.db.ImageEntity
 import com.tcode.pixabayclient.data.db.ImagesDao
 import com.tcode.pixabayclient.data.db.ImagesDatabase
@@ -14,24 +14,18 @@ import com.tcode.pixabayclient.utils.TimerProvider
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalPagingApi::class)
-class ImagesResultsMediator(
-    private val query: String,
+@ExperimentalPagingApi
+class DBCachedImagesResultsMediator(
+    query: String,
     private val imagesDataSource: ImagesDataSource,
     private val database: ImagesDatabase,
     private val imagesDao: ImagesDao,
     private val remoteKeysDao: RemoteKeysDao,
     private val timeProvider: TimerProvider,
-    private val cacheLifetimeMs: Long =
-        TimeUnit.MILLISECONDS.convert(
-            CACHE_LIFETIME_HOURS,
-            TimeUnit.HOURS,
-        ),
-) : RemoteMediator<Int, ImageEntity>() {
+    private val cacheLifetime: CacheLifetime,
+) : ImagesRemoteMediator(query) {
     companion object {
-        private const val CACHE_LIFETIME_HOURS = 1L
         private const val FIRST_PAGE_INDEX = 1
         private const val NEXT_PAGE_INCREMENT = 1
     }
@@ -40,7 +34,7 @@ class ImagesResultsMediator(
         if (timeProvider.currentTimeMillis() - (
                 remoteKeysDao.getOldestCreationTime(query)
                     ?: 0
-            ) < cacheLifetimeMs
+            ) < cacheLifetime.lifetimeMs
         ) {
             // Cached data is up-to-date, so there is no need to re-fetch from the network.
             InitializeAction.SKIP_INITIAL_REFRESH

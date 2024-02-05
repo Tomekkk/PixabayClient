@@ -4,6 +4,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.RemoteMediator
 import com.tcode.pixabayclient.data.db.ImagesDatabase
 import com.tcode.pixabayclient.data.db.RemoteKeysDao
+import com.tcode.pixabayclient.data.mediator.CacheLifetime
+import com.tcode.pixabayclient.data.mediator.DBCachedImagesResultsMediator
 import com.tcode.pixabayclient.utils.TimerProvider
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -26,15 +28,19 @@ class ImagesResultsMediatorTest {
                 object : TimerProvider {
                     override fun currentTimeMillis(): Long = 1
                 }
+            val fakeCacheLifetime =
+                object : CacheLifetime {
+                    override val lifetimeMs: Long = 1
+                }
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     mockk(),
                     database,
                     mockk(),
                     imagesDao,
                     fakeTimeProvider,
-                    1,
+                    fakeCacheLifetime,
                 )
             // When
             val result = objectUnderTest.initialize()
@@ -56,16 +62,19 @@ class ImagesResultsMediatorTest {
                 object : TimerProvider {
                     override fun currentTimeMillis(): Long = 2
                 }
-            val cacheLifetimeMs = 1L
+            val fakeCacheLifetime =
+                object : CacheLifetime {
+                    override val lifetimeMs: Long = 1
+                }
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     mockk(),
                     database,
                     mockk(),
                     imagesDao,
                     fakeTimeProvider,
-                    cacheLifetimeMs,
+                    fakeCacheLifetime,
                 )
             // When
             val result = objectUnderTest.initialize()
@@ -87,16 +96,19 @@ class ImagesResultsMediatorTest {
                 object : TimerProvider {
                     override fun currentTimeMillis(): Long = 2
                 }
-            val cacheLifetimeMs = 2L
+            val fakeCacheLifetime =
+                object : CacheLifetime {
+                    override val lifetimeMs: Long = 2
+                }
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     mockk(),
                     database,
                     mockk(),
                     imagesDao,
                     fakeTimeProvider,
-                    cacheLifetimeMs,
+                    fakeCacheLifetime,
                 )
             // When
             val result = objectUnderTest.initialize()

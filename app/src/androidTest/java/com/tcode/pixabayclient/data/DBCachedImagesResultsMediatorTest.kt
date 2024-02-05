@@ -11,6 +11,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.tcode.pixabayclient.data.api.SearchResponse
 import com.tcode.pixabayclient.data.db.ImageEntity
 import com.tcode.pixabayclient.data.db.ImagesDatabase
+import com.tcode.pixabayclient.data.mediator.CacheLifetime
+import com.tcode.pixabayclient.data.mediator.DBCachedImagesResultsMediator
 import com.tcode.pixabayclient.utils.TimerProvider
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -25,9 +27,13 @@ import retrofit2.Response
 
 @ExperimentalPagingApi
 @RunWith(AndroidJUnit4::class)
-class ImagesResultsMediatorTest {
+class DBCachedImagesResultsMediatorTest {
     private val fakeImages = ImagesFactory.createDto(1..10)
     private val fakeDataSource = FakeImagesDataSource()
+    private val fakeCacheLifetime =
+        object : CacheLifetime {
+            override val lifetimeMs: Long = 1L
+        }
     private lateinit var mockDatabase: ImagesDatabase
     private val fakeTimerProvider =
         object : TimerProvider {
@@ -55,14 +61,14 @@ class ImagesResultsMediatorTest {
             // Given
             fakeDataSource.setImages(fakeImages)
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     fakeDataSource,
                     mockDatabase,
-                    mockDatabase.getImages(),
-                    mockDatabase.getRemoteKeys(),
+                    mockDatabase.getImagesDao(),
+                    mockDatabase.getRemoteKeysDao(),
                     fakeTimerProvider,
-                    1,
+                    fakeCacheLifetime,
                 )
 
             val pagingState =
@@ -85,14 +91,14 @@ class ImagesResultsMediatorTest {
             // Given
             fakeDataSource.setImages(emptyList())
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     fakeDataSource,
                     mockDatabase,
-                    mockDatabase.getImages(),
-                    mockDatabase.getRemoteKeys(),
+                    mockDatabase.getImagesDao(),
+                    mockDatabase.getRemoteKeysDao(),
                     fakeTimerProvider,
-                    1,
+                    fakeCacheLifetime,
                 )
 
             val pagingState =
@@ -116,14 +122,14 @@ class ImagesResultsMediatorTest {
             fakeDataSource.exception =
                 HttpException(Response.error<SearchResponse>(400, "".toResponseBody(null)))
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     fakeDataSource,
                     mockDatabase,
-                    mockDatabase.getImages(),
-                    mockDatabase.getRemoteKeys(),
+                    mockDatabase.getImagesDao(),
+                    mockDatabase.getRemoteKeysDao(),
                     fakeTimerProvider,
-                    1,
+                    fakeCacheLifetime,
                 )
 
             val pagingState =
@@ -147,14 +153,14 @@ class ImagesResultsMediatorTest {
             fakeDataSource.exception =
                 HttpException(Response.error<SearchResponse>(500, "".toResponseBody(null)))
             val objectUnderTest =
-                ImagesResultsMediator(
+                DBCachedImagesResultsMediator(
                     "q",
                     fakeDataSource,
                     mockDatabase,
-                    mockDatabase.getImages(),
-                    mockDatabase.getRemoteKeys(),
+                    mockDatabase.getImagesDao(),
+                    mockDatabase.getRemoteKeysDao(),
                     fakeTimerProvider,
-                    1,
+                    fakeCacheLifetime,
                 )
 
             val pagingState =

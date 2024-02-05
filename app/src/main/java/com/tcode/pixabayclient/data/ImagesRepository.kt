@@ -1,11 +1,10 @@
 package com.tcode.pixabayclient.data
 
-import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.tcode.pixabayclient.data.db.ImageEntity
-import kotlinx.coroutines.flow.Flow
 
 interface ImagesRepository {
-    fun getImagesStream(query: String): Flow<PagingData<ImageEntity>>
+    fun getPagingSource(query: String): PagingSource<Int, ImageEntity>
 
     suspend fun getImage(id: Long): ImageEntity?
 }

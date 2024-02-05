@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
     version = 1,
 )
 abstract class ImagesDatabase : RoomDatabase() {
-    abstract fun getImages(): ImagesDao
+    abstract fun getImagesDao(): ImagesDao
 
-    abstract fun getRemoteKeys(): RemoteKeysDao
+    abstract fun getRemoteKeysDao(): RemoteKeysDao
 }
