@@ -20,7 +20,6 @@ The required minimum API level is 23.
 
 https://github.com/Tomekkk/PixabayClient/assets/3057880/41b03ffe-9962-4916-8df3-df8ddcdac21d
 
-
 ## Architecture
 
 The PixabayClient app is built on top of layered architecture that follows uni-directional data
@@ -28,17 +27,17 @@ flow, drives the separation of concerns and focuses on making testing easier. MV
 to separate the UI and business logic.
 The architecture has clearly defined UI, data and domain layer reflected
 in [data](/app/src/main/java/com/tcode/pixabayclient/data), [domain](/app/src/main/java/com/tcode/pixabayclient/domain)
-ad [ui](/app/src/main/java/com/tcode/pixabayclient/ui) packages. A dependency injection
-pattern is used to provide the dependencies to the components making them easier to maintain and
-test. Coroutines and flows are used to handle asynchronous operations and provide data streams.
+ad [ui](/app/src/main/java/com/tcode/pixabayclient/ui) packages. Data layer expose interfaces which
+can be easily faked in tests. A dependency injection pattern is used to provide the dependencies to
+the abstract components making them easier to maintain and test. Coroutines and flows are used to
+handle asynchronous operations and provide data streams. Taking into account size of the project it
+was implemented as single module.
 
 ## Data Layer
 
 The data layer is built with a Repository pattern that exposes data stored in the Room database
 fetched from API. Defined interfaces provide a clear abstraction for the data
-sources. [ImagesRepository](/app/src/main/java/com/tcode/pixabayclient/data/ImagesRepository.kt)
-follows the Dependency Inversion Principle providing a clear separation between the data layer and
-the domain layer. Each search results are paged by 40 items per page and loaded from the network
+sources. Each search results are paged by 40 items per page and loaded from the network
 with the help
 of [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview).
 
@@ -49,10 +48,9 @@ avoid unnecessary network calls. The app
 uses [RemoteMediator](https://developer.android.com/topic/libraries/architecture/paging/v3-overview#repository)
 implementation to fetch, cache and invalidate the search results for a given query. The cache is
 cleared for a given query when teh user resends the search request and data stored in the cache is
-older than 24
-hours.
+older than 24 hours.
 
-## [ImagesResultsMediator](/app/src/main/java/com/tcode/pixabayclient/data/ImagesResultsMediator.kt)
+## [DBCachedImagesMediator](/app/src/main/java/com/tcode/pixabayclient/data/media/DBCachedImagesMediator.kt)
 
 Validate the cached data and initially refresh it when needed, load next pages from network and
 store them in the database cache. The mediator is used by the PagingSource to provide the data to
@@ -71,15 +69,18 @@ models to provide the data to the UI layer.
 
 [AAC ViewModels](https://developer.android.com/topic/libraries/architecture/viewmodel) are used to
 manage UI state in a lifecycle conscious way with support of persisting it through configuration
-changes. Hilt extension is used to provide the ViewModel instances in composable functions.
+changes. Jetpack Compose is used to build the UI layer. The UI is built with a single activity.
 Navigation was implemented with [Jetpack Navigation](https://developer.android.com/guide/navigation)
+Hilt extension is used to provide the ViewModel instances in composable functions.
 
 ## Testing
 
-In favor of fakes over the mocks, dependencies are defined as abstractions,
-e.g. [ImagesDataSource](/app/src/main/java/com/tcode/pixabayclient/data/ImagesDataSource.kt) is the
-easy to fake interface for testing remote API calls results. Business logic layers are unit tested
-with JUnit, Mockk and Robolectric.
+In favor of fakes over the mocks, dependencies of repositories, data sources, mediators or
+time/cache providers are defined as abstractions. Data/business logic layers are unit tested
+with JUnit, Mockk and
+Robolectric. [DBCachedImagesResultsMediatorTest](/app/src/test/java/com/tcode/pixabayclient/data/media/DBCachedImagesResultsMediatorTest.kt)
+is an example of instrumented test that checks the behavior of the mediator interacting with Room
+database.
 
 ## Continuous Integration
 
