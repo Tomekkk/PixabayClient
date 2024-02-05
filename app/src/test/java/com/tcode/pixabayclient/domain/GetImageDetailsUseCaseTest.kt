@@ -1,9 +1,8 @@
 package com.tcode.pixabayclient.domain
 
-import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.tcode.pixabayclient.data.ImagesRepository
 import com.tcode.pixabayclient.data.db.ImageEntity
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -26,7 +25,9 @@ class GetImageDetailsUseCaseTest {
                 )
             val fakeImagesRepository =
                 object : ImagesRepository {
-                    override fun getImagesStream(query: String): Flow<PagingData<ImageEntity>> = throw NotImplementedError()
+                    override fun getPagingSource(query: String): PagingSource<Int, ImageEntity> {
+                        throw NotImplementedError()
+                    }
 
                     override suspend fun getImage(id: Long): ImageEntity =
                         ImageEntity(
