@@ -50,7 +50,7 @@ implementation to fetch, cache and invalidate the search results for a given que
 cleared for a given query when teh user resends the search request and data stored in the cache is
 older than 24 hours.
 
-## [DBCachedImagesMediator](/app/src/main/java/com/tcode/pixabayclient/data/media/DBCachedImagesMediator.kt)
+## [DBCachedImagesResultsMediator](/app/src/main/java/com/tcode/pixabayclient/data/mediator/DBCachedImagesResultsMediator.kt)
 
 Validate the cached data and initially refresh it when needed, load next pages from network and
 store them in the database cache. The mediator is used by the PagingSource to provide the data to
@@ -78,7 +78,7 @@ Hilt extension is used to provide the ViewModel instances in composable function
 In favor of fakes over the mocks, dependencies of repositories, data sources, mediators or
 time/cache providers are defined as abstractions. Data/business logic layers are unit tested
 with JUnit, Mockk and
-Robolectric. [DBCachedImagesResultsMediatorTest](/app/src/test/java/com/tcode/pixabayclient/data/media/DBCachedImagesResultsMediatorTest.kt)
+Robolectric. [DBCachedImagesResultsMediatorTest](app/src/androidTest/java/com/tcode/pixabayclient/data/DBCachedImagesResultsMediatorTest.kt)
 is an example of instrumented test that checks the behavior of the mediator interacting with Room
 database.
 
