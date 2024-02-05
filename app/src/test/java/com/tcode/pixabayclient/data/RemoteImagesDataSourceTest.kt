@@ -4,7 +4,6 @@ import com.tcode.pixabayclient.data.api.ApiKeyProvider
 import com.tcode.pixabayclient.data.api.PixabayService
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -20,7 +19,6 @@ class RemoteImagesDataSourceTest {
             val pixabayService = mockk<PixabayService>(relaxed = true)
             val objectUnderTest =
                 RemoteImagesDataSource(
-                    dispatcher = StandardTestDispatcher(testScheduler),
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
@@ -51,7 +49,6 @@ class RemoteImagesDataSourceTest {
             val pixabayService = mockk<PixabayService>(relaxed = true)
             val objectUnderTest =
                 RemoteImagesDataSource(
-                    dispatcher = StandardTestDispatcher(testScheduler),
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
@@ -82,7 +79,6 @@ class RemoteImagesDataSourceTest {
             val pixabayService = mockk<PixabayService>(relaxed = true)
             val objectUnderTest =
                 RemoteImagesDataSource(
-                    dispatcher = StandardTestDispatcher(testScheduler),
                     pixabayService = pixabayService,
                     apiKeyProvider = fakeKeyProvider,
                 )
