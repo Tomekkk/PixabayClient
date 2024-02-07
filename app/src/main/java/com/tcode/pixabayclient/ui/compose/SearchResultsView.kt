@@ -4,13 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,12 +40,14 @@ import com.tcode.pixabayclient.domain.ImageResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchResults(
     modifier: Modifier = Modifier,
     imagesStream: Flow<PagingData<ImageResult>>,
     onImageClick: (Long) -> Unit = {},
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val images = imagesStream.collectAsLazyPagingItems()
     (images.loadState.refresh as? LoadState.Error)?.error?.message?.let { errorMessage ->
@@ -61,6 +66,7 @@ fun SearchResults(
         columns = StaggeredGridCells.Adaptive(160.dp),
         verticalItemSpacing = 4.dp,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
+        contentPadding = contentPadding,
         content = {
             items(
                 images.itemCount,
