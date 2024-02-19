@@ -27,11 +27,11 @@ flow, drives the separation of concerns and focuses on making testing easier. MV
 to separate the UI and business logic.
 The architecture has clearly defined UI, data and domain layer reflected
 in [data](/app/src/main/java/com/tcode/pixabayclient/data), [domain](/app/src/main/java/com/tcode/pixabayclient/domain)
-ad [ui](/app/src/main/java/com/tcode/pixabayclient/ui) packages. Data layer expose interfaces which
+ad [ui](/app/src/main/java/com/tcode/pixabayclient/ui) packages. The data layer expose interfaces that
 can be easily faked in tests. A dependency injection pattern is used to provide the dependencies to
 the abstract components making them easier to maintain and test. Coroutines and flows are used to
-handle asynchronous operations and provide data streams. Taking into account size of the project it
-was implemented as single module.
+handle asynchronous operations and provide data streams. Taking into account the size of the project it
+was implemented as a single module.
 
 ## Data Layer
 
@@ -47,28 +47,28 @@ Pixabay API requires [caching requests for 24h](https://pixabay.com/api/docs/#ap
 avoid unnecessary network calls. The app
 uses [RemoteMediator](https://developer.android.com/topic/libraries/architecture/paging/v3-overview#repository)
 implementation to fetch, cache and invalidate the search results for a given query. The cache is
-cleared for a given query when teh user resends the search request and data stored in the cache is
+cleared for a given query when the user resends the search request and data stored in the cache is
 older than 24 hours.
 
 ## [DBCachedImagesResultsMediator](/app/src/main/java/com/tcode/pixabayclient/data/mediator/DBCachedImagesResultsMediator.kt)
 
 Validate the cached data and initially refresh it when needed, load next pages from network and
 store them in the database cache. The mediator is used by the PagingSource to provide the data to
-the UI layer. Based on state of the anchor position(scroll position) and currently loaded pages, the
-mediator decides whether to load the next page and how to append new items to stream presented in
-the UI.
+the UI layer. Based on the state of the anchor position(scroll position) and currently loaded pages, 
+the mediator decides whether to load the next page and how to append new items to the stream presented 
+in the UI.
 
 ## Domain Layer
 
 Following the Clean Architecture principles the domain layer is built with use cases that provide
-better separation of concerns. The use cases uses repository interfaces defined in the data layer.
+better separation of concerns. The use cases use repository interfaces defined in the data layer.
 Data models are converted to domain models in the domain layer. The use cases are used by the view
 models to provide the data to the UI layer.
 
 ## UI Layer
 
 [AAC ViewModels](https://developer.android.com/topic/libraries/architecture/viewmodel) are used to
-manage UI state in a lifecycle conscious way with support of persisting it through configuration
+manage UI state in a lifecycle conscious way with the support of persisting it through configuration
 changes. Jetpack Compose is used to build the UI layer. The UI is built with a single activity.
 Navigation was implemented with [Jetpack Navigation](https://developer.android.com/guide/navigation)
 Hilt extension is used to provide the ViewModel instances in composable functions.
@@ -107,7 +107,7 @@ Some of the libraries used in the Application are:
 - [Kotlin Flows](https://kotlinlang.org/docs/flow.html) - Asynchronous data streams
 - [Material 3](https://m3.material.io/) - Material Design 3 components
 - [Mockk](https://mockk.io/) - Mocking library for Kotlin
-- [Moshi](https://github.com/square/moshi) - Api responses JSON parsing
+- [Moshi](https://github.com/square/moshi) - API responses JSON parsing
 - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) -
   Pagination with Jetpack Compose and Room integrations
 - [Retrofit](https://square.github.io/retrofit/) - Type-safe HTTP client
