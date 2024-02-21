@@ -14,9 +14,11 @@ import com.tcode.pixabayclient.data.db.ImagesDatabase
 import com.tcode.pixabayclient.data.mediator.CacheLifetime
 import com.tcode.pixabayclient.data.mediator.DBCachedImagesResultsMediator
 import com.tcode.pixabayclient.utils.TimerProvider
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
 import org.junit.Before
@@ -24,6 +26,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 @ExperimentalPagingApi
 @RunWith(AndroidJUnit4::class)
@@ -116,42 +119,10 @@ class DBCachedImagesResultsMediatorTest {
         }
 
     @Test
-    fun when_refresh_load_throw_http400_should_return_success_with_end_page_reached() =
+    fun when_refresh_load_throw_io_exception_should_return_error() =
         runTest {
             // Given
-            fakeDataSource.exception =
-                HttpException(Response.error<SearchResponse>(400, "".toResponseBody(null)))
-            val objectUnderTest =
-                DBCachedImagesResultsMediator(
-                    "q",
-                    fakeDataSource,
-                    mockDatabase,
-                    mockDatabase.getImagesDao(),
-                    mockDatabase.getRemoteKeysDao(),
-                    fakeTimerProvider,
-                    fakeCacheLifetime,
-                )
-
-            val pagingState =
-                PagingState<Int, ImageEntity>(
-                    listOf(),
-                    null,
-                    PagingConfig(10),
-                    0,
-                )
-            // When
-            val result = objectUnderTest.load(LoadType.REFRESH, pagingState)
-            // Then
-            assertTrue(result is RemoteMediator.MediatorResult.Success)
-            assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
-        }
-
-    @Test
-    fun when_refresh_load_throw_non_400_exception_should_return_error() =
-        runTest {
-            // Given
-            fakeDataSource.exception =
-                HttpException(Response.error<SearchResponse>(500, "".toResponseBody(null)))
+            fakeDataSource.exception = IOException()
             val objectUnderTest =
                 DBCachedImagesResultsMediator(
                     "q",
@@ -174,5 +145,44 @@ class DBCachedImagesResultsMediatorTest {
             val result = objectUnderTest.load(LoadType.REFRESH, pagingState)
             // Then
             assertTrue(result is RemoteMediator.MediatorResult.Error)
+        }
+
+    @Test
+    fun when_refresh_load_throw_400http_exception_with_body_should_return_error_with_readable_body() =
+        runTest {
+            // Given
+            fakeDataSource.exception =
+                HttpException(
+                    Response.error<SearchResponse>(
+                        400,
+                        "[ERROR 400] \"page\" is out of valid range.".toResponseBody("text/plain".toMediaType()),
+                    ),
+                )
+            val objectUnderTest =
+                DBCachedImagesResultsMediator(
+                    "q",
+                    fakeDataSource,
+                    mockDatabase,
+                    mockDatabase.getImagesDao(),
+                    mockDatabase.getRemoteKeysDao(),
+                    fakeTimerProvider,
+                    fakeCacheLifetime,
+                )
+
+            val pagingState =
+                PagingState<Int, ImageEntity>(
+                    listOf(),
+                    null,
+                    PagingConfig(10),
+                    0,
+                )
+            // When
+            val result = objectUnderTest.load(LoadType.REFRESH, pagingState)
+            // Then
+            assertTrue(result is RemoteMediator.MediatorResult.Error)
+            assertEquals(
+                "[ERROR 400] \"page\" is out of valid range.",
+                (result as RemoteMediator.MediatorResult.Error).throwable.message,
+            )
         }
 }

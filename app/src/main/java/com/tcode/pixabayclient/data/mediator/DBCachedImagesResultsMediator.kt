@@ -13,7 +13,6 @@ import com.tcode.pixabayclient.data.db.RemoteKeysDao
 import com.tcode.pixabayclient.utils.TimerProvider
 import retrofit2.HttpException
 import java.io.IOException
-import java.net.HttpURLConnection
 
 @ExperimentalPagingApi
 class DBCachedImagesResultsMediator(
@@ -123,21 +122,7 @@ class DBCachedImagesResultsMediator(
             }
             return MediatorResult.Success(endOfPaginationReached = noMoreData)
         } catch (exception: HttpException) {
-            return if (exception.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
-                database.withTransaction {
-                    remoteKeysDao.getLatestKey(query)?.let { remoteKey ->
-                        remoteKeysDao.update(
-                            remoteKey.copy(
-                                nextPage = null,
-                            ),
-                        )
-                    }
-                }
-
-                MediatorResult.Success(endOfPaginationReached = true)
-            } else {
-                MediatorResult.Error(exception)
-            }
+            return MediatorResult.Error(exception.withErrorBody())
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
         }
